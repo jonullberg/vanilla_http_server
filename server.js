@@ -8,29 +8,27 @@ var server = http.createServer(function(req, res) {
 	var name = path.slice(7);
 	if(path === '/time') {
 		var currentTime = new Date();
-		currentTime.toString();
+		currentTime.toLocaleTimeString();
 		res.writeHead(200, {
 			'Content-Type': 'application/json'
 		});
 		res.write(JSON.stringify({msg: 'your current time is ' + currentTime}));
 		return res.end();
 	} else if (path.slice(0,6) === '/greet') {
-		console.log(req.method);
-		if (req.method = 'POST') {
+		res.writeHead(200, {
+			'Content-Type': 'application/json'
+		});
+		if (req.method === 'POST') {
 			req.on('data', function(data) {
-				res.writeHead(200, {
-					'Content-Type': 'application/json'
-				});
 				var body = JSON.parse(data);
-				res.write(JSON.stringify({msg: 'hello' + body.name}));
+				var greeting = 'hello ' + body.name;
+				res.write(JSON.stringify({msg: greeting}));
 				return res.end();
 			});
-		} 
-			res.writeHead(200, {
-				'Content-Type': 'application/json'
-			});
+		} else {
 			res.write(JSON.stringify({msg: 'hello ' + name}));
-			return res.end();
+			res.end();
+		}
 	} else {
 		res.writeHead(404, {
 			'Content-Type': 'application/json'
